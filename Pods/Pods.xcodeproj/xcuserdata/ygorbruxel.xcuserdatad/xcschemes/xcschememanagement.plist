@@ -19,20 +19,30 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftyBase64.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>23F9D1F370837EB8095DC351926821D5</key>
+		<key>1557DFD8D60ABAF52EB15897CA238F93</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3ED1BCA2E19DDEC4FBA12A66761EFEC4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>401D4623F7F91A471C0B94CFE683F481</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>4DA5AC3C1B549565E20220F77D296F4E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FDEC830E83050687D3706ED260E4F536</key>
 		<dict>
 			<key>primary</key>
 			<true/>

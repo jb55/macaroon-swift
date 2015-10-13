@@ -31,6 +31,7 @@
 		7408B1EEC67D98CDAB9D9810 /* Pods_SwiftMacaroons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftMacaroons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82390D341BCC8F23002125FB /* Macaroon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Macaroon.swift; sourceTree = "<group>"; };
 		824BF9361BCD804F00FBBF6E /* Caveat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Caveat.swift; sourceTree = "<group>"; };
+		826867781BCDA6E20089E1BF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftMacaroons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftMacaroons.h; sourceTree = "<group>"; };
 		82CE1F641BCB0DB600138020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 				82CE1F641BCB0DB600138020 /* Info.plist */,
 				82390D341BCC8F23002125FB /* Macaroon.swift */,
 				824BF9361BCD804F00FBBF6E /* Caveat.swift */,
+				826867781BCDA6E20089E1BF /* MyPlayground.playground */,
 			);
 			path = SwiftMacaroons;
 			sourceTree = "<group>";
