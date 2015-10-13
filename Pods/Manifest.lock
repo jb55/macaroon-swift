@@ -1,0 +1,23 @@
+PODS:
+  - CryptoSwift (0.0.16)
+  - Sodium (0.1)
+
+DEPENDENCIES:
+  - CryptoSwift
+  - Sodium (from `https://github.com/jedisct1/swift-sodium.git`, branch `master`)
+
+EXTERNAL SOURCES:
+  Sodium:
+    :branch: master
+    :git: https://github.com/jedisct1/swift-sodium.git
+
+CHECKOUT OPTIONS:
+  Sodium:
+    :commit: b0021af27a8c8eb5b82b5b809865942e5b88e1c1
+    :git: https://github.com/jedisct1/swift-sodium.git
+
+SPEC CHECKSUMS:
+  CryptoSwift: 05b7e813763fc7a0e8726e962365d6e09f091098
+  Sodium: 5312975aa3e333467e9cfa62549752f150cd0fcd
+
+COCOAPODS: 0.39.0
