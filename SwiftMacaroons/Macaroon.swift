@@ -30,13 +30,16 @@ class Macaroon {
     
     func createSignature() -> [UInt8] {
         let derivedKey = generateDerivedKey()
-        return hmac(key: derivedKey, data: [UInt8](identifier.utf8))
+        return hmac(key: derivedKey, data: stringToIntArray(identifier))
     }
     
     func addFirstPartyCaveat(predicate: String) {
         caveats.append(Caveat(id: predicate))
-//        signature =
-//        @signature = Utils.sign_first_party_caveat(@signature, predicate)
+        signatureBytes = hmac(key: signatureBytes, data: stringToIntArray(predicate))
+    }
+    
+    func stringToIntArray(string: String) -> [UInt8] {
+        return [UInt8](string.utf8)
     }
     
     func hmac(key key: [UInt8], data: [UInt8]) -> [UInt8] {

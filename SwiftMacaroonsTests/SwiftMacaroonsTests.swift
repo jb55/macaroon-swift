@@ -33,7 +33,7 @@ class SwiftMacaroonsTests: XCTestCase {
     func testFirstPartyCaveatChangeSignature() {
         let macaroon = getMacaroon()
         
-//        macaroon.addFirstPartyCaveat("test = caveat")
+        macaroon.addFirstPartyCaveat("test = caveat")
         XCTAssert(macaroon.signature == "197bac7a044af33332865b9266e26d493bdd668a660e44d88ce1a998c23dbd67")
     }
     
