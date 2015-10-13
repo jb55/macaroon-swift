@@ -3,7 +3,7 @@ import CryptoSwift
 
 class Macaroon {
     
-    var key: String
+    var key: [UInt8]
     var identifier: String
     var location: String
     
@@ -14,10 +14,10 @@ class Macaroon {
     var signatureBytes: [UInt8] = []
     var caveats: [Caveat]
     
-    private let magicMacaroonKey = "macaroons-key-generator"
+    private let magicMacaroonKey = [UInt8]("macaroons-key-generator".utf8)
     
     init(key: String, identifier: String, location: String) {
-        self.key = key
+        self.key = [UInt8](key.utf8)
         self.identifier = identifier
         self.location = location
         self.caveats = []
@@ -30,22 +30,18 @@ class Macaroon {
     
     func createSignature() -> [UInt8] {
         let derivedKey = generateDerivedKey()
-        let utf8Data = [UInt8](identifier.utf8)
-        let authenticator = Authenticator.HMAC(key: derivedKey, variant: HMAC.Variant.sha256)
-        return authenticator.authenticate(utf8Data)!
+        return hmac(key: derivedKey, data: [UInt8](identifier.utf8))
     }
     
-//    func addFirstPartyCaveat(predicate: String) {
-//        caveats.append(Caveat(id: predicate))
+    func addFirstPartyCaveat(predicate: String) {
+        caveats.append(Caveat(id: predicate))
 //        signature =
 //        @signature = Utils.sign_first_party_caveat(@signature, predicate)
-//    }
+    }
     
-    func hmac(key key: String, data: String) -> [UInt8] {
-        let utf8Key = [UInt8](key.utf8)
-        let utf8Data = [UInt8](data.utf8)
-        let authenticator = Authenticator.HMAC(key: utf8Key, variant: HMAC.Variant.sha256)
-        let hmacUInt = authenticator.authenticate(utf8Data)!
+    func hmac(key key: [UInt8], data: [UInt8]) -> [UInt8] {
+        let authenticator = Authenticator.HMAC(key: key, variant: HMAC.Variant.sha256)
+        let hmacUInt = authenticator.authenticate(data)!
         return hmacUInt
     }
 }
