@@ -48,6 +48,13 @@ class SwiftMacaroonsTests: XCTestCase {
         XCTAssert(macaroon.serialize() == "MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDAxZGNpZCBhY2NvdW50ID0gMzczNTkyODU1OQowMDJmc2lnbmF0dXJlIB7-R2PykNvODB0IR3Nn4R9O7kVqZJM89mLXl3LbuCEoCg")
     }
     
+    func testMacaroonWithThirdPartyCaveatSerialization() {
+        let macaroon = getMacaroon()
+        macaroon.addFirstPartyCaveat("account = 3735928559")
+        macaroon.addThirdPartyCaveat("http://auth.mybank/", verificationId: "SECRET for 3rd party caveat", identifier: macaroon.identifier)
+        XCTAssert(macaroon.serialize().hasPrefix("MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDAxZGNpZCBhY2NvdW50ID0gMzczNTkyODU1OQowMDFmY2lkIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDA1MXZpZC"))
+    }
+    
     private func getMacaroon() -> Macaroon {
         let location = "http://mybank/"
         let identifier = "we used our secret key"

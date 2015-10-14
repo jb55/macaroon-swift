@@ -1,12 +1,11 @@
-//: Playground - noun: a place where people can play
-
 import UIKit
 
-var str = "Hello, playground"
+//let b = "aa".trunc(11)
 
-var packet = "c"
+//b
 
-strtoul
+let c:[UInt8] = [0x01, 0x02]
+var r = Array<UInt8>(count: 32 - c.count, repeatedValue: 0x00)
+r.insertContentsOf(c, at: 0)
 
-String.init(format: "%10@", packet)
-
+r.count
