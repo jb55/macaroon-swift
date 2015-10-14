@@ -35,6 +35,11 @@ class Macaroon {
         var packets = [UInt8]()
         packets.appendContentsOf(packetize("location", data: [UInt8](location.utf8)))
         packets.appendContentsOf(packetize("identifier", data: [UInt8](identifier.utf8)))
+        
+        caveats.forEach { (c) -> () in
+            packets.appendContentsOf(packetize("cid", data: [UInt8](c.id.utf8)))
+        }
+        
         packets.appendContentsOf(packetize("signature", data: signatureBytes))
         return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
