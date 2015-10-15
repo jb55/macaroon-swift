@@ -55,6 +55,12 @@ class SwiftMacaroonsTests: XCTestCase {
         XCTAssert(macaroon.serialize().hasPrefix("MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDAxZGNpZCBhY2NvdW50ID0gMzczNTkyODU1OQowMDFmY2lkIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDA1MXZpZC"))
     }
     
+    func testMacaroonDeserialization() {
+        let serializedMacaroon = "MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDAyZnNpZ25hdHVyZSDj2eApCFJsTAA5rhURQRXZf91ovyujebNCqvD2F9BVLwo"
+        XCTAssert(Macaroon(bytes: serializedMacaroon).location == "aaa")
+
+    }
+    
     private func getMacaroon() -> Macaroon {
         let location = "http://mybank/"
         let identifier = "we used our secret key"

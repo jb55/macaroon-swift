@@ -1,11 +1,18 @@
 import UIKit
+import CryptoSwift
 
 //let b = "aa".trunc(11)
 
 //b
 
-let c:[UInt8] = [0x01, 0x02]
-var r = Array<UInt8>(count: 32 - c.count, repeatedValue: 0x00)
-r.insertContentsOf(c, at: 0)
+let c:[UInt8] = [0x30, 0x30, 0x31, 0x63]
 
-r.count
+let str = String.init(bytes: c, encoding: NSUTF8StringEncoding)
+Int.init(str!, radix: 16)
+
+//28
+
+//"001c"
+
+
+//48, 48, 49, 99

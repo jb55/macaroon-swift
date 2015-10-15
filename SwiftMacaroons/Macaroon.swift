@@ -27,6 +27,15 @@ class Macaroon {
         self.signatureBytes = self.createSignature()
     }
     
+    init(bytes: String) {
+        self.key = [UInt8]()
+        self.identifier = ""
+        self.location = ""
+        self.caveats = []
+        self.signatureBytes = [UInt8]()
+        self.deserialize(bytes)
+    }
+    
     func addFirstPartyCaveat(predicate: String) {
         caveats.append(Caveat(id: predicate))
         signatureBytes = hmac(key: signatureBytes, data: stringToIntArray(predicate))
@@ -68,6 +77,38 @@ class Macaroon {
         return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
     
+    func deserialize(bytes: String) {
+        var result = bytes
+        let numberOfEqualsInTheEnd = (4 - (bytes.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) % 4)) % 4
+        for _ in 1...numberOfEqualsInTheEnd {
+            result.append("=" as Character)
+        }
+        
+        let decoded = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions.init(rawValue: 0))
+        
+        let count = decoded!.length / sizeof(UInt8)
+        var decodedUInt8 = [UInt8](count: count, repeatedValue: 0)
+        decoded!.getBytes(&decodedUInt8, length:count * sizeof(UInt8))
+        
+        let index = 0
+        
+        while index < decoded?.length {
+            let str = String.init(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
+            let packetLength = Int.init(str!, radix: 16)
+            var strippedPacket = String.init(bytes: decodedUInt8[(index + packetPrefixLength)..<(index + packetLength! - 2)], encoding: NSUTF8StringEncoding)
+            
+            let tuple = depacketize(strippedPacket!)
+                        
+        }
+//        NSString(data: data, encoding: NSUTF8StringEncoding)
+    }
+    
+    func depacketize(packet: String) -> (String, String) {
+        let key = packet.componentsSeparatedByString(" ")[0]
+        let value = packet.componentsSeparatedByString(" ")[1]
+        return (key, value)
+    }
+    
     private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {
         
         let count = verification.length / sizeof(UInt8)
@@ -88,9 +129,8 @@ class Macaroon {
         if array.count > 32 {
             result = Array(array[0..<32])
         } else if array.count < 32 {
-            var truncationResult = Array<UInt8>(count: 32 - array.count, repeatedValue: 0x00)
-            truncationResult.insertContentsOf(array, at: 0)
-            result = truncationResult
+            result = Array<UInt8>(count: 32 - array.count, repeatedValue: 0x00)
+            result.insertContentsOf(array, at: 0)
         } else {
             result = array
         }
