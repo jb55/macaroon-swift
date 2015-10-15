@@ -15,4 +15,8 @@ extension String {
             return self
         }
     }
+    
+    func toInt8() -> [UInt8] {
+        return [UInt8](self.utf8)
+    }
 }

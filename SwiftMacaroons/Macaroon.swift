@@ -38,7 +38,7 @@ class Macaroon {
     
     func addFirstPartyCaveat(predicate: String) {
         caveats.append(Caveat(id: predicate))
-        signatureBytes = hmac(key: signatureBytes, data: stringToIntArray(predicate))
+        signatureBytes = hmac(key: signatureBytes, data: predicate.toInt8())
     }
 
     func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
@@ -69,7 +69,7 @@ class Macaroon {
                 packets.appendContentsOf(packetize("vid", data: array))
                 
                 
-                packets.appendContentsOf(packetize("cl", data: stringToIntArray(c.location!)))
+                packets.appendContentsOf(packetize("cl", data: c.location!.toInt8()))
             }
         }
         
@@ -207,15 +207,11 @@ class Macaroon {
     
     private func createSignature() -> [UInt8] {
         let derivedKey = generateDerivedKey()
-        return hmac(key: derivedKey, data: stringToIntArray(identifier))
+        return hmac(key: derivedKey, data: identifier.toInt8())
     }
     
     private func generateDerivedKey() -> [UInt8] {
         return hmac(key: magicMacaroonKey, data: key)
-    }
-    
-    private func stringToIntArray(string: String) -> [UInt8] {
-        return [UInt8](string.utf8)
     }
 }
 
