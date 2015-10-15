@@ -86,6 +86,8 @@ class Macaroon {
         
         //http://ruby-doc.org/stdlib-2.2.3/libdoc/base64/rdoc/Base64.html#method-i-urlsafe_decode64
         result = result.stringByReplacingOccurrencesOfString("-", withString: "+")
+        result = result.stringByReplacingOccurrencesOfString("_", withString: "/")
+        
         
         let decoded = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))
         
