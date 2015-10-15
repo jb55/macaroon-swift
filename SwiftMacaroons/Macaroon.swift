@@ -44,8 +44,8 @@ class Macaroon {
     func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
         let caveatKey = hmac(key: magicMacaroonKey, data: [UInt8](verificationId.utf8))
         
-        let derivedCaveatKey = truncInt8ToNSData(caveatKey)
-        let truncatedSignature = truncInt8ToNSData(signatureBytes)
+        let derivedCaveatKey = caveatKey.trunc(32).toNSData()
+        let truncatedSignature = signatureBytes.trunc(32).toNSData()
         let verification:NSData = Sodium()!.secretBox.seal(derivedCaveatKey, secretKey: truncatedSignature)!
         
         caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
@@ -110,11 +110,7 @@ class Macaroon {
 			case "identifier":
 				self.identifier = tuple.1 as! String
 			case "signature":
-				let signature = tuple.1 as! NSData
-				let count = signature.length / sizeof(UInt8)
-				var array = [UInt8](count: count, repeatedValue: 0)
-				signature.getBytes(&array, length:count * sizeof(UInt8))
-				self.signatureBytes = array
+				self.signatureBytes = (tuple.1 as! NSData).toInt8Array()
             case "cid":
                 self.caveats.append(Caveat(id: tuple.1 as! String))
             case "vid":
@@ -154,32 +150,13 @@ class Macaroon {
     }
     
     private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {
-        
-        let count = verification.length / sizeof(UInt8)
-        var array = [UInt8](count: count, repeatedValue: 0)
-        verification.getBytes(&array, length:count * sizeof(UInt8))
-        
-        var verificationIdHash = hmac(key: signatureBytes, data: array)
+        var verificationIdHash = hmac(key: signatureBytes, data: verification.toInt8Array())
         
         let caveatIdHash = hmac(key: signatureBytes, data: [UInt8](caveatId.utf8))
         
         verificationIdHash.appendContentsOf(caveatIdHash)
         
         return hmac(key: signatureBytes, data: verificationIdHash)
-    }
-    
-    private func truncInt8ToNSData(array: [UInt8]) -> NSData {
-        var result: [UInt8]
-        if array.count > 32 {
-            result = Array(array[0..<32])
-        } else if array.count < 32 {
-            result = Array<UInt8>(count: 32 - array.count, repeatedValue: 0x00)
-            result.insertContentsOf(array, at: 0)
-        } else {
-            result = array
-        }
-        
-        return NSData(bytes: result, length: result.count)
     }
     
     private func packetize(key: String, data: [UInt8]) -> [UInt8] {
