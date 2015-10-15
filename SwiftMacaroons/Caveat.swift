@@ -3,11 +3,11 @@ import Foundation
 class Caveat {
     
     let id: String
-    var verificationId: NSData?
+    var verificationId: [UInt8]?
     var location: String?
     
     
-    init(id: String, verificationId: NSData? = nil, location: String? = nil) {
+    init(id: String, verificationId: [UInt8]? = nil, location: String? = nil) {
         self.id = id
         self.verificationId = verificationId
         self.location = location

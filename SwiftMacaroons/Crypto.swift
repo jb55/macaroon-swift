@@ -8,6 +8,9 @@ func hmac(key key: [UInt8], data: [UInt8]) -> [UInt8] {
     return hmacUInt
 }
 
-//func secretBox(message: [UInt8], data: [UInt8]) -> [UInt8] {
-//    let result = Sodium()!.secretBox.seal(derivedCaveatKey, secretKey: truncatedSignature)!
-//}
+func secretBox(message: [UInt8], secretKey: [UInt8]) -> [UInt8] {
+    let messageData = message.toNSData()
+    let secreteKeyData = secretKey.toNSData()
+    let result:NSData = Sodium()!.secretBox.seal(messageData, secretKey: secreteKeyData)!
+    return result.toInt8Array()
+}

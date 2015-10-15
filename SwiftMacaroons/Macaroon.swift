@@ -44,9 +44,9 @@ class Macaroon {
     func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
         let caveatKey = hmac(key: magicMacaroonKey, data: [UInt8](verificationId.utf8))
         
-        let derivedCaveatKey = caveatKey.trunc(32).toNSData()
-        let truncatedSignature = signatureBytes.trunc(32).toNSData()
-        let verification:NSData = Sodium()!.secretBox.seal(derivedCaveatKey, secretKey: truncatedSignature)!
+        let derivedCaveatKey = caveatKey.trunc(32)
+        let truncatedSignature = signatureBytes.trunc(32)
+        let verification = secretBox(derivedCaveatKey, secretKey: truncatedSignature)
         
         caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
         signatureBytes = signWithThirdPartyCaveat(verification, caveatId: identifier)
@@ -61,14 +61,7 @@ class Macaroon {
             packets.appendContentsOf(packetize("cid", data: [UInt8](c.id.utf8)))
             
             if c.verificationId != nil && c.location != nil {
-                
-                let count = c.verificationId!.length / sizeof(UInt8)
-                var array = [UInt8](count: count, repeatedValue: 0)
-                c.verificationId!.getBytes(&array, length:count * sizeof(UInt8))
-                
-                packets.appendContentsOf(packetize("vid", data: array))
-                
-                
+                packets.appendContentsOf(packetize("vid", data: c.verificationId!))
                 packets.appendContentsOf(packetize("cl", data: c.location!.toInt8()))
             }
         }
@@ -114,7 +107,7 @@ class Macaroon {
             case "cid":
                 self.caveats.append(Caveat(id: tuple.1 as! String))
             case "vid":
-                self.caveats.last!.verificationId = tuple.1 as! NSData
+                self.caveats.last!.verificationId = (tuple.1 as! NSData).toInt8Array()
             case "cl":
                 self.caveats.last!.location = tuple.1 as! String
 			default:
@@ -149,8 +142,8 @@ class Macaroon {
         return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
     }
     
-    private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {
-        var verificationIdHash = hmac(key: signatureBytes, data: verification.toInt8Array())
+    private func signWithThirdPartyCaveat(verification: [UInt8], caveatId: String) -> [UInt8] {
+        var verificationIdHash = hmac(key: signatureBytes, data: verification)
         
         let caveatIdHash = hmac(key: signatureBytes, data: [UInt8](caveatId.utf8))
         
