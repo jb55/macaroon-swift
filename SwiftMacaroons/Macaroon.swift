@@ -84,7 +84,10 @@ class Macaroon {
             result.append("=" as Character)
         }
         
-        let decoded = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions.init(rawValue: 0))
+        //http://ruby-doc.org/stdlib-2.2.3/libdoc/base64/rdoc/Base64.html#method-i-urlsafe_decode64
+        result = result.stringByReplacingOccurrencesOfString("-", withString: "+")
+        
+        let decoded = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))
         
         let count = decoded!.length / sizeof(UInt8)
         var decodedUInt8 = [UInt8](count: count, repeatedValue: 0)
@@ -93,7 +96,7 @@ class Macaroon {
         var index = 0
         
         while index < decoded?.length {
-            let str = String.init(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
+            let str = String(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
 
             let packetLength = Int(str!, radix: 16)!
 			let packet = decodedUInt8[(index + packetPrefixLength)..<(index + packetLength)]
@@ -102,7 +105,6 @@ class Macaroon {
 			switch (tuple.0) {
 			case "location":
 				self.location = tuple.1 as! String
-				
 			case "identifier":
 				self.identifier = tuple.1 as! String
 			case "signature":
@@ -111,6 +113,8 @@ class Macaroon {
 				var array = [UInt8](count: count, repeatedValue: 0)
 				signature.getBytes(&array, length:count * sizeof(UInt8))
 				self.signatureBytes = array
+            case "cid":
+                self.caveats.append(Caveat(id: tuple.1 as! String))
 			default:
 				print("o bixo pegou")
 			}
@@ -119,7 +123,6 @@ class Macaroon {
 			
 			print("\(tuple)")
         }
-//        NSString(data: data, encoding: NSUTF8StringEncoding)
     }
     
 	func depacketize(packet: [UInt8]) -> (String, AnyObject) {

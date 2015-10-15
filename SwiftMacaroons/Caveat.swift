@@ -14,3 +14,28 @@ class Caveat {
     }
 
 }
+
+//func ==(left: Caveat?, right: Caveat?) -> Bool {
+//	
+//	if left == nil {
+//		return false
+//	}
+//
+//	if right == nil {
+//		return false
+//	}
+//	
+//	if left!.id != right!.id {
+//		return false
+//	}
+//	
+//	if left!.verificationId != right!.verificationId {
+//		return false
+//	}
+//	
+//	if left!.location != right!.location {
+//		return false
+//	}
+//	
+//	return true
+//}
