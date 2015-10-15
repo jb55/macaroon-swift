@@ -90,23 +90,49 @@ class Macaroon {
         var decodedUInt8 = [UInt8](count: count, repeatedValue: 0)
         decoded!.getBytes(&decodedUInt8, length:count * sizeof(UInt8))
         
-        let index = 0
+        var index = 0
         
         while index < decoded?.length {
             let str = String.init(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
-            let packetLength = Int.init(str!, radix: 16)
-            var strippedPacket = String.init(bytes: decodedUInt8[(index + packetPrefixLength)..<(index + packetLength! - 2)], encoding: NSUTF8StringEncoding)
-            
-            let tuple = depacketize(strippedPacket!)
-                        
+
+            let packetLength = Int(str!, radix: 16)!
+			let packet = decodedUInt8[(index + packetPrefixLength)..<(index + packetLength)]
+			let tuple = depacketize(Array(packet))
+			
+			switch (tuple.0) {
+			case "location":
+				self.location = tuple.1 as! String
+				
+			case "identifier":
+				self.identifier = tuple.1 as! String
+				
+			default:
+				print("o bixo pegou")
+			}
+			
+			index += packetLength
+			
+			print("\(tuple)")
         }
 //        NSString(data: data, encoding: NSUTF8StringEncoding)
     }
     
-    func depacketize(packet: String) -> (String, String) {
-        let key = packet.componentsSeparatedByString(" ")[0]
-        let value = packet.componentsSeparatedByString(" ")[1]
-        return (key, value)
+	func depacketize(packet: [UInt8]) -> (String, AnyObject) {
+
+		let keyTest = String(bytes: packet[0..<9], encoding: NSUTF8StringEncoding)!
+		
+		if keyTest == "signature" {
+			return ("signature", NSData.withBytes(Array(packet[10..<packet.count])))
+			
+		} else {
+			let packet = String(bytes: packet, encoding: NSUTF8StringEncoding)!
+			let splitString = packet.componentsSeparatedByString(" ")
+			let key = splitString[0]
+			let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")
+			return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
+		}
+		
+		
     }
     
     private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {

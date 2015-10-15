@@ -5,7 +5,7 @@ import CryptoSwift
 
 //b
 
-let c:[UInt8] = [0x30, 0x30, 0x31, 0x63]
+let c:[UInt8] = [0x30, 0x30, 0x31, 0x63, 0x00000000002f]
 
 let str = String.init(bytes: c, encoding: NSUTF8StringEncoding)
 Int.init(str!, radix: 16)
