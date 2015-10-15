@@ -16,7 +16,7 @@ class Macaroon {
     var signatureBytes: [UInt8] = []
     var caveats: [Caveat]
     
-    private let magicMacaroonKey = [UInt8]("macaroons-key-generator".utf8)
+    private let magicMacaroonKey = "macaroons-key-generator".toInt8()
     private let packetPrefixLength = 4
     
     init(key: String, identifier: String, location: String) {
@@ -42,7 +42,7 @@ class Macaroon {
     }
 
     func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
-        let caveatKey = hmac(key: magicMacaroonKey, data: [UInt8](verificationId.utf8))
+        let caveatKey = hmac(key: magicMacaroonKey, data: verificationId.toInt8())
         
         let derivedCaveatKey = caveatKey.trunc(32)
         let truncatedSignature = signatureBytes.trunc(32)
@@ -54,11 +54,11 @@ class Macaroon {
     
     func serialize() -> String {
         var packets = [UInt8]()
-        packets.appendContentsOf(packetize("location", data: [UInt8](location.utf8)))
-        packets.appendContentsOf(packetize("identifier", data: [UInt8](identifier.utf8)))
+        packets.appendContentsOf(packetize("location", data: location.toInt8()))
+        packets.appendContentsOf(packetize("identifier", data: identifier.toInt8()))
         
         caveats.forEach { (c) -> () in
-            packets.appendContentsOf(packetize("cid", data: [UInt8](c.id.utf8)))
+            packets.appendContentsOf(packetize("cid", data: c.id.toInt8()))
             
             if c.verificationId != nil && c.location != nil {
                 packets.appendContentsOf(packetize("vid", data: c.verificationId!))
@@ -81,16 +81,11 @@ class Macaroon {
         result = result.stringByReplacingOccurrencesOfString("-", withString: "+")
         result = result.stringByReplacingOccurrencesOfString("_", withString: "/")
         
-        
-        let decoded = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))
-        
-        let count = decoded!.length / sizeof(UInt8)
-        var decodedUInt8 = [UInt8](count: count, repeatedValue: 0)
-        decoded!.getBytes(&decodedUInt8, length:count * sizeof(UInt8))
+        let decodedUInt8 = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))!.toInt8Array()
         
         var index = 0
         
-        while index < decoded?.length {
+        while index < decodedUInt8.count {
             let str = String(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
 
             let packetLength = Int(str!, radix: 16)!
@@ -144,9 +139,7 @@ class Macaroon {
     
     private func signWithThirdPartyCaveat(verification: [UInt8], caveatId: String) -> [UInt8] {
         var verificationIdHash = hmac(key: signatureBytes, data: verification)
-        
-        let caveatIdHash = hmac(key: signatureBytes, data: [UInt8](caveatId.utf8))
-        
+        let caveatIdHash = hmac(key: signatureBytes, data: caveatId.toInt8())
         verificationIdHash.appendContentsOf(caveatIdHash)
         
         return hmac(key: signatureBytes, data: verificationIdHash)

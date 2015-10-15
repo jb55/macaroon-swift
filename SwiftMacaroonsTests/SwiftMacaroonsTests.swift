@@ -86,7 +86,7 @@ class SwiftMacaroonsTests: XCTestCase {
         
         let reverseMacaroon = Macaroon(bytes: macaroonRight.serialize())
 
-        XCTAssert(reverseMacaroon.caveats.last!.verificationId!.isEqualToData(macaroonRight.caveats.last!.verificationId!))
+        XCTAssert(reverseMacaroon.caveats.last!.verificationId! == macaroonRight.caveats.last!.verificationId!)
     }
     
     private func getMacaroon() -> Macaroon {
