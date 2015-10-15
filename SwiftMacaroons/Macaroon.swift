@@ -105,7 +105,12 @@ class Macaroon {
 				
 			case "identifier":
 				self.identifier = tuple.1 as! String
-				
+			case "signature":
+				let signature = tuple.1 as! NSData
+				let count = signature.length / sizeof(UInt8)
+				var array = [UInt8](count: count, repeatedValue: 0)
+				signature.getBytes(&array, length:count * sizeof(UInt8))
+				self.signatureBytes = array
 			default:
 				print("o bixo pegou")
 			}
@@ -122,7 +127,7 @@ class Macaroon {
 		let keyTest = String(bytes: packet[0..<9], encoding: NSUTF8StringEncoding)!
 		
 		if keyTest == "signature" {
-			return ("signature", NSData.withBytes(Array(packet[10..<packet.count])))
+			return ("signature", NSData.withBytes(Array(packet[10..<packet.count - 1])))
 			
 		} else {
 			let packet = String(bytes: packet, encoding: NSUTF8StringEncoding)!
@@ -131,8 +136,6 @@ class Macaroon {
 			let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")
 			return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
 		}
-		
-		
     }
     
     private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {
