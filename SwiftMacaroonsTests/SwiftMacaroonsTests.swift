@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import CryptoSwift
+
 @testable import SwiftMacaroons
 
 class SwiftMacaroonsTests: XCTestCase {
@@ -75,8 +77,17 @@ class SwiftMacaroonsTests: XCTestCase {
         macaroonRight.addFirstPartyCaveat("account = 3735928559")
         
 		XCTAssert(macaroon.caveats.first!.id == macaroonRight.caveats.first!.id)
-
 	}
+    
+    func testMacaroonWithThirdPartyCaveatDeserialization() {
+        let macaroonRight = getMacaroon()
+        macaroonRight.addFirstPartyCaveat("account = 3735928559")
+        macaroonRight.addThirdPartyCaveat("http://auth.mybank/", verificationId: "SECRET for 3rd party caveat", identifier: macaroonRight.identifier)
+        
+        let reverseMacaroon = Macaroon(bytes: macaroonRight.serialize())
+
+        XCTAssert(reverseMacaroon.caveats.last!.verificationId!.isEqualToData(macaroonRight.caveats.last!.verificationId!))
+    }
     
     private func getMacaroon() -> Macaroon {
         let location = "http://mybank/"

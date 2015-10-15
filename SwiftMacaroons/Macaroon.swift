@@ -117,6 +117,10 @@ class Macaroon {
 				self.signatureBytes = array
             case "cid":
                 self.caveats.append(Caveat(id: tuple.1 as! String))
+            case "vid":
+                self.caveats.last!.verificationId = tuple.1 as! NSData
+            case "cl":
+                self.caveats.last!.location = tuple.1 as! String
 			default:
 				print("o bixo pegou")
 			}
@@ -128,19 +132,25 @@ class Macaroon {
     }
     
 	func depacketize(packet: [UInt8]) -> (String, AnyObject) {
+        
+        var keyTest = String(bytes: packet[0..<3], encoding: NSUTF8StringEncoding)!
+        
+        if keyTest == "vid" {
+            return ("vid", NSData.withBytes(Array(packet[4..<packet.count - 1])))
+        }
 
-		let keyTest = String(bytes: packet[0..<9], encoding: NSUTF8StringEncoding)!
+		keyTest = String(bytes: packet[0..<9], encoding: NSUTF8StringEncoding)!
 		
 		if keyTest == "signature" {
 			return ("signature", NSData.withBytes(Array(packet[10..<packet.count - 1])))
-			
-		} else {
-			let packet = String(bytes: packet, encoding: NSUTF8StringEncoding)!
-			let splitString = packet.componentsSeparatedByString(" ")
-			let key = splitString[0]
-			let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")
-			return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
 		}
+        
+        let packet = String(bytes: packet, encoding: NSUTF8StringEncoding)!
+        let splitString = packet.componentsSeparatedByString(" ")
+        let key = splitString[0]
+        let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")
+        
+        return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
     }
     
     private func signWithThirdPartyCaveat(verification: NSData, caveatId: String) -> [UInt8] {
