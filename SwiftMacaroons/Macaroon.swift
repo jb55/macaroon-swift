@@ -57,12 +57,12 @@ class Macaroon {
         packets.appendContentsOf(packetize("location", data: location.toInt8()))
         packets.appendContentsOf(packetize("identifier", data: identifier.toInt8()))
         
-        caveats.forEach { (c) -> () in
-            packets.appendContentsOf(packetize("cid", data: c.id.toInt8()))
+        caveats.forEach { (caveat) -> () in
+            packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
             
-            if c.verificationId != nil && c.location != nil {
-                packets.appendContentsOf(packetize("vid", data: c.verificationId!))
-                packets.appendContentsOf(packetize("cl", data: c.location!.toInt8()))
+            if caveat.verificationId != nil && caveat.location != nil {
+                packets.appendContentsOf(packetize("vid", data: caveat.verificationId!))
+                packets.appendContentsOf(packetize("cl", data: caveat.location!.toInt8()))
             }
         }
         
@@ -70,19 +70,13 @@ class Macaroon {
         return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
     
-    func deserialize(bytes: String) {
-        var result = bytes
-        let numberOfEqualsInTheEnd = (4 - (bytes.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) % 4)) % 4
+    func deserialize(var base64Coded: String) {
+        let numberOfEqualsInTheEnd = (4 - (base64Coded.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) % 4)) % 4
         for _ in 1...numberOfEqualsInTheEnd {
-            result.append("=" as Character)
+            base64Coded.append("=" as Character)
         }
         
-        //http://ruby-doc.org/stdlib-2.2.3/libdoc/base64/rdoc/Base64.html#method-i-urlsafe_decode64
-        result = result.stringByReplacingOccurrencesOfString("-", withString: "+")
-        result = result.stringByReplacingOccurrencesOfString("_", withString: "/")
-        
-        let decodedUInt8 = NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))!.toInt8Array()
-        
+        let decodedUInt8 = base64UrlSafeDecode(base64Coded)
         var index = 0
         
         while index < decodedUInt8.count {
@@ -104,14 +98,12 @@ class Macaroon {
             case "vid":
                 self.caveats.last!.verificationId = (tuple.1 as! NSData).toInt8Array()
             case "cl":
-                self.caveats.last!.location = tuple.1 as! String
+                self.caveats.last!.location = (tuple.1 as! String)
 			default:
 				print("o bixo pegou")
 			}
 			
 			index += packetLength
-			
-			print("\(tuple)")
         }
     }
     
