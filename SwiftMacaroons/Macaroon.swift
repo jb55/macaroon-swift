@@ -108,16 +108,11 @@ class Macaroon {
     }
     
 	func depacketize(packet: [UInt8]) -> (String, AnyObject) {
-        
-        var keyTest = String(bytes: packet[0..<3], encoding: NSUTF8StringEncoding)!
-        
-        if keyTest == "vid" {
+        if Array(packet[0..<3]) == "vid".toInt8() {
             return ("vid", NSData.withBytes(Array(packet[4..<packet.count - 1])))
         }
-
-		keyTest = String(bytes: packet[0..<9], encoding: NSUTF8StringEncoding)!
 		
-		if keyTest == "signature" {
+		if Array(packet[0..<9]) == "signature".toInt8() {
 			return ("signature", NSData.withBytes(Array(packet[10..<packet.count - 1])))
 		}
         
