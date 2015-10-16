@@ -22,3 +22,5 @@ let result = "MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZW
 let result2 = "MDAxY2xvY2F0aW9uIGh0dHA6Ly9teWJhbmsvCjAwMjZpZGVudGlmaWVyIHdlIHVzZWQgb3VyIHNlY3JldCBrZXkKMDAyZnNpZ25hdHVyZSDj2eApCFJsTAA5rhURQRXZf91ovyujebNCqvD2F9BVLwo===================="
 
 NSData(base64EncodedString: result, options: NSDataBase64DecodingOptions(rawValue: 0))
+
+let j  = Array<UInt8>(count: 0, repeatedValue: 0x00)
