@@ -82,9 +82,10 @@ class Macaroon {
         var index = 0
         
         while index < decodedUInt8.count {
-            let str = String(bytes: decodedUInt8[index..<(index + packetPrefixLength)], encoding: NSUTF8StringEncoding)
+			
+            let str = decodedUInt8[index..<(index + packetPrefixLength)].toString()
 
-            let packetLength = Int(str!, radix: 16)!
+            let packetLength = Int(str, radix: 16)!
 			let packet = decodedUInt8[(index + packetPrefixLength)..<(index + packetLength)]
 			let tuple = depacketize(Array(packet))
 			
@@ -118,7 +119,7 @@ class Macaroon {
 			return ("signature", NSData.withBytes(Array(packet[10..<packet.count - 1])))
 		}
         
-        let packet = String(bytes: packet, encoding: NSUTF8StringEncoding)!
+        let packet = packet.toString()
         let splitString = packet.componentsSeparatedByString(" ")
         let key = splitString[0]
         let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")

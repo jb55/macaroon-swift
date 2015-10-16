@@ -21,6 +21,12 @@ extension String {
     }
 }
 
+extension SequenceType where Generator.Element == UInt8 {
+	func toString() -> String {
+		return String(bytes: self, encoding: NSUTF8StringEncoding)!
+	}
+}
+
 extension Array where Element : UnsignedIntegerType {
     func trunc(length: Int) -> [Element] {
         if self.count > length {
