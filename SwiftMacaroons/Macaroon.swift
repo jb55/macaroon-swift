@@ -60,7 +60,7 @@ class Macaroon {
         caveats.forEach { (caveat) -> () in
             packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
             
-            if caveat.verificationId != nil && caveat.location != nil {
+            if caveat.isThirdParty() {
                 packets.appendContentsOf(packetize("vid", data: caveat.verificationId!))
                 packets.appendContentsOf(packetize("cl", data: caveat.location!.toInt8()))
             }

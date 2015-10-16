@@ -12,5 +12,9 @@ class Caveat {
         self.verificationId = verificationId
         self.location = location
     }
+    
+    func isThirdParty() -> Bool {
+        return verificationId != nil && location != nil
+    }
 
 }
