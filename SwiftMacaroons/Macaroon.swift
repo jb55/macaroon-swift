@@ -136,13 +136,7 @@ class Macaroon {
         let packet_size = packetPrefixLength + 2 + key.characters.count + data.count
         var header = String(packet_size, radix: 16)
         
-        if header.characters.count < 4 {
-            header = "0".stringByAppendingString(header)
-        }
-        if header.characters.count < 4 {
-            header = "0".stringByAppendingString(header)
-        }
-        if header.characters.count < 4 {
+        while header.characters.count < 4 {
             header = "0".stringByAppendingString(header)
         }
         
