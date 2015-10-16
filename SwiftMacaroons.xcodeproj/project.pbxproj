@@ -10,7 +10,7 @@
 		8233B73E1BD05D160051D50F /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8233B73D1BD05D160051D50F /* Crypto.swift */; settings = {ASSET_TAGS = (); }; };
 		82390D351BCC8F23002125FB /* Macaroon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82390D341BCC8F23002125FB /* Macaroon.swift */; settings = {ASSET_TAGS = (); }; };
 		824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824BF9361BCD804F00FBBF6E /* Caveat.swift */; settings = {ASSET_TAGS = (); }; };
-		8268677A1BCF0AA40089E1BF /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826867791BCF0AA40089E1BF /* StringExtensions.swift */; settings = {ASSET_TAGS = (); }; };
+		8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826867791BCF0AA40089E1BF /* Extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		82CE1F631BCB0DB600138020 /* SwiftMacaroons.h in Headers */ = {isa = PBXBuildFile; fileRef = 82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		82CE1F6A1BCB0DB600138020 /* SwiftMacaroons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */; settings = {ASSET_TAGS = (); }; };
 		82CE1F6F1BCB0DB600138020 /* SwiftMacaroonsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CE1F6E1BCB0DB600138020 /* SwiftMacaroonsTests.swift */; };
@@ -35,7 +35,7 @@
 		82390D341BCC8F23002125FB /* Macaroon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Macaroon.swift; sourceTree = "<group>"; };
 		824BF9361BCD804F00FBBF6E /* Caveat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Caveat.swift; sourceTree = "<group>"; };
 		826867781BCDA6E20089E1BF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
-		826867791BCF0AA40089E1BF /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		826867791BCF0AA40089E1BF /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftMacaroons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftMacaroons.h; sourceTree = "<group>"; };
 		82CE1F641BCB0DB600138020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 				82390D341BCC8F23002125FB /* Macaroon.swift */,
 				824BF9361BCD804F00FBBF6E /* Caveat.swift */,
 				826867781BCDA6E20089E1BF /* MyPlayground.playground */,
-				826867791BCF0AA40089E1BF /* StringExtensions.swift */,
+				826867791BCF0AA40089E1BF /* Extensions.swift */,
 				8233B73D1BD05D160051D50F /* Crypto.swift */,
 			);
 			path = SwiftMacaroons;
@@ -268,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8233B73E1BD05D160051D50F /* Crypto.swift in Sources */,
-				8268677A1BCF0AA40089E1BF /* StringExtensions.swift in Sources */,
+				8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */,
 				82390D351BCC8F23002125FB /* Macaroon.swift in Sources */,
 				824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */,
 			);
