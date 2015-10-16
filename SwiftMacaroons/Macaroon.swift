@@ -57,13 +57,13 @@ class Macaroon {
         packets.appendContentsOf(packetize("location", data: location.toInt8()))
         packets.appendContentsOf(packetize("identifier", data: identifier.toInt8()))
         
-        caveats.forEach { serializeCaveat($0, intoPackets: packets) }
+        caveats.forEach { serializeCaveat($0, intoPackets: &packets) }
         
         packets.appendContentsOf(packetize("signature", data: signatureBytes))
         return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
     
-    func serializeCaveat(caveat: Caveat, var intoPackets packets: [UInt8]) {
+    func serializeCaveat(caveat: Caveat, inout intoPackets packets: [UInt8]) {
         packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
         
         if caveat.isThirdParty() {
