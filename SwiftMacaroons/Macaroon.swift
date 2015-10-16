@@ -57,17 +57,19 @@ class Macaroon {
         packets.appendContentsOf(packetize("location", data: location.toInt8()))
         packets.appendContentsOf(packetize("identifier", data: identifier.toInt8()))
         
-        caveats.forEach { (caveat) -> () in
-            packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
-            
-            if caveat.isThirdParty() {
-                packets.appendContentsOf(packetize("vid", data: caveat.verificationId!))
-                packets.appendContentsOf(packetize("cl", data: caveat.location!.toInt8()))
-            }
-        }
+        caveats.forEach { serializeCaveat($0, intoPackets: packets) }
         
         packets.appendContentsOf(packetize("signature", data: signatureBytes))
         return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
+    }
+    
+    func serializeCaveat(caveat: Caveat, var intoPackets packets: [UInt8]) {
+        packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
+        
+        if caveat.isThirdParty() {
+            packets.appendContentsOf(packetize("vid", data: caveat.verificationId!))
+            packets.appendContentsOf(packetize("cl", data: caveat.location!.toInt8()))
+        }
     }
     
     func deserialize(var base64Coded: String) {
@@ -140,11 +142,11 @@ class Macaroon {
             header = "0".stringByAppendingString(header)
         }
         
-        var content = [UInt8]("\(key) ".utf8)
+        var content = "\(key) ".toInt8()
         content.appendContentsOf(data)
-        content.appendContentsOf([UInt8]("\n".utf8))
+        content.appendContentsOf("\n".toInt8())
         
-        var result = [UInt8](header.utf8)
+        var result = header.toInt8()
         result.appendContentsOf(content)
         return result
     }
