@@ -140,8 +140,7 @@ class Macaroon {
     }
     
     private func createSignature() -> [UInt8] {
-        let derivedKey = MacaroonCrypto.generateDerivedKey(self.key)
-        return Crypto.hmac(key: derivedKey, data: identifier.toInt8())
+        return MacaroonCrypto.initialSignature(key, identifier: identifier.toInt8())
     }
 }
 

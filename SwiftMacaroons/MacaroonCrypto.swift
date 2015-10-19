@@ -4,8 +4,7 @@ class MacaroonCrypto {
     private static let magicMacaroonKey = "macaroons-key-generator".toInt8()
     
     static func createVerificationId(verificationId: [UInt8], signature: [UInt8]) -> [UInt8] {
-        let caveatKey = MacaroonCrypto.generateDerivedKey(verificationId)
-        
+        let caveatKey = generateDerivedKey(verificationId)
         let derivedCaveatKey = caveatKey.trunc(32)
         let truncatedSignature = signature.trunc(32)
         return Crypto.secretBox(derivedCaveatKey, secretKey: truncatedSignature)
@@ -17,6 +16,11 @@ class MacaroonCrypto {
         verificationIdHash.appendContentsOf(caveatIdHash)
         
         return Crypto.hmac(key: signature, data: verificationIdHash)
+    }
+    
+    static func initialSignature(key: [UInt8], identifier: [UInt8]) -> [UInt8] {
+        let derivedKey = generateDerivedKey(key)
+        return Crypto.hmac(key: derivedKey, data: identifier)
     }
     
     static func generateDerivedKey(key: [UInt8]) -> [UInt8] {
