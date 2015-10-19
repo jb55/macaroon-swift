@@ -16,11 +16,10 @@ class Macaroon {
     var signatureBytes: [UInt8] = []
     var caveats: [Caveat]
     
-    private let magicMacaroonKey = "macaroons-key-generator".toInt8()
     private let packetPrefixLength = 4
     
     init(key: String, identifier: String, location: String) {
-        self.key = [UInt8](key.utf8)
+        self.key = key.toInt8()
         self.identifier = identifier
         self.location = location
         self.caveats = []
@@ -34,22 +33,6 @@ class Macaroon {
         self.caveats = []
         self.signatureBytes = [UInt8]()
         self.deserialize(bytes)
-    }
-    
-    func addFirstPartyCaveat(predicate: String) {
-        caveats.append(Caveat(id: predicate))
-        signatureBytes = Crypto.hmac(key: signatureBytes, data: predicate.toInt8())
-    }
-
-    func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
-        let caveatKey = Crypto.hmac(key: magicMacaroonKey, data: verificationId.toInt8())
-        
-        let derivedCaveatKey = caveatKey.trunc(32)
-        let truncatedSignature = signatureBytes.trunc(32)
-        let verification = Crypto.secretBox(derivedCaveatKey, secretKey: truncatedSignature)
-        
-        caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
-        signatureBytes = signWithThirdPartyCaveat(verification, caveatId: identifier)
     }
     
     func serialize() -> String {
@@ -127,14 +110,6 @@ class Macaroon {
         return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
     }
     
-    private func signWithThirdPartyCaveat(verification: [UInt8], caveatId: String) -> [UInt8] {
-        var verificationIdHash = Crypto.hmac(key: signatureBytes, data: verification)
-        let caveatIdHash = Crypto.hmac(key: signatureBytes, data: caveatId.toInt8())
-        verificationIdHash.appendContentsOf(caveatIdHash)
-        
-        return Crypto.hmac(key: signatureBytes, data: verificationIdHash)
-    }
-    
     private func packetize(key: String, data: [UInt8]) -> [UInt8] {
         let packet_size = packetPrefixLength + 2 + key.characters.count + data.count
         var header = String(packet_size, radix: 16)
@@ -152,13 +127,21 @@ class Macaroon {
         return result
     }
     
-    private func createSignature() -> [UInt8] {
-        let derivedKey = generateDerivedKey()
-        return Crypto.hmac(key: derivedKey, data: identifier.toInt8())
+    func addFirstPartyCaveat(predicate: String) {
+        caveats.append(Caveat(id: predicate))
+        signatureBytes = Crypto.hmac(key: signatureBytes, data: predicate.toInt8())
     }
     
-    private func generateDerivedKey() -> [UInt8] {
-        return Crypto.hmac(key: magicMacaroonKey, data: key)
+    func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
+        let verification = MacaroonCrypto.createVerificationId(verificationId.toInt8(), signature: signatureBytes)
+        
+        caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
+        signatureBytes = MacaroonCrypto.signWithThirdPartyCaveat(verification, caveatId: identifier.toInt8(), signature: signatureBytes)
+    }
+    
+    private func createSignature() -> [UInt8] {
+        let derivedKey = MacaroonCrypto.generateDerivedKey(self.key)
+        return Crypto.hmac(key: derivedKey, data: identifier.toInt8())
     }
 }
 
