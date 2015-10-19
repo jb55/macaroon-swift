@@ -57,7 +57,7 @@ class Macaroon {
     
     func deserialize(var base64Coded: String) {
         let numberOfEqualsInTheEnd = (4 - (base64Coded.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) % 4)) % 4
-        for _ in 1...numberOfEqualsInTheEnd {
+        for _ in 0..<numberOfEqualsInTheEnd {
             base64Coded.append("=" as Character)
         }
         
