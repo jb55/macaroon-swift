@@ -26,4 +26,15 @@ class MacaroonCrypto {
     static func generateDerivedKey(key: [UInt8]) -> [UInt8] {
         return Crypto.hmac(key: magicMacaroonKey, data: key)
     }
+    
+    static func bindSignature(signature: [UInt8], with anotherSignature: [UInt8]) -> [UInt8] {
+        let emptyArray = [UInt8].init(count: 32, repeatedValue: 0x00)
+        
+        var hash1 = Crypto.hmac(key: emptyArray, data: signature)
+        let hash2 = Crypto.hmac(key: emptyArray, data: anotherSignature)
+        hash1.appendContentsOf(hash2)
+        
+        return Crypto.hmac(key: emptyArray, data: hash1)
+    }
+    
 }

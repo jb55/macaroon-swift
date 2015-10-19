@@ -89,6 +89,16 @@ class SwiftMacaroonsTests: XCTestCase {
         XCTAssert(reverseMacaroon.caveats.last!.verificationId! == macaroonRight.caveats.last!.verificationId!)
     }
     
+    func testPrepareForRequest() {
+        let originalMacaroon = Macaroon(bytes: "MDAyNGxvY2F0aW9uIGh0dHA6Ly9sb2NhbGhvc3Q6NDU2Ny8KMDAyY2lkZW50aWZpZXIgd2UgdXNlZCBvdXIgb3RoZXIgc2VjcmV0IGtleQowMDFkY2lkIGFjY291bnQgPSAzNzM1OTI4NTU5CjAwMmVjaWQga2VvZW9rZW9lZm9la29la29la2VvZWtvZWtvZWtmZXdqZXdvaQowMDUxdmlkIOH9qlSj6RvaRFw9rmbERtjPvfTj2drfcx9FHZikvjXI_Q9UwRgajUnqiCigNexFVGkZMGwmu7xN_3SpXfjPNl4wrGu5i7s_HQowMDIyY2wgaHR0cDovL2xvY2FsaG9zdDo0NTU1L2F1dGgKMDAyZnNpZ25hdHVyZSBTDwgtKErTSOdEdXAi18ASFQ2EseDInlSq2A81U2ShPwo")
+        
+        let dischargedMacaroon = Macaroon(bytes: "MDAyOGxvY2F0aW9uIGh0dHA6Ly9sb2NhbGhvc3QvNDU1NS9hdXRoCjAwMzVpZGVudGlmaWVyIGtlb2Vva2VvZWZvZWtvZWtvZWtlb2Vrb2Vrb2VrZmV3amV3b2kKMDAxM2NpZCB1c2VyPUFsaWNlCjAwMmZzaWduYXR1cmUg8uk47qyc0NLZ13G9J4Q63zS2wSPerQ7vhBdHKaQjlV8K")
+        
+        let finalMacaroon = originalMacaroon.prepareForRequest(dischargedMacaroon)
+        
+        XCTAssert(finalMacaroon.signature == "722a032c8b31a8fec9d3fc315e63d40e02d9462fad9db62c6e3afcbde35028c1")
+    }
+    
     private func getMacaroon() -> Macaroon {
         let location = "http://mybank/"
         let identifier = "we used our secret key"

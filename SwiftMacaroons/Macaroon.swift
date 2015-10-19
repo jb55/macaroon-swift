@@ -127,6 +127,12 @@ class Macaroon {
         return result
     }
     
+    func prepareForRequest(macaroon: Macaroon) -> Macaroon {
+        let result = Macaroon(bytes: self.serialize())
+        result.signatureBytes = MacaroonCrypto.bindSignature(self.signatureBytes, with: macaroon.signatureBytes)
+        return result
+    }
+    
     func addFirstPartyCaveat(predicate: String) {
         caveats.append(Caveat(id: predicate))
         signatureBytes = Crypto.hmac(key: signatureBytes, data: predicate.toInt8())
