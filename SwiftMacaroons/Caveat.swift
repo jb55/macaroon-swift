@@ -1,20 +1,15 @@
 import Foundation
 
-class Caveat {
-    
-    let id: String
-    var verificationId: [UInt8]?
-    var location: String?
-    
-    
-    init(id: String, verificationId: [UInt8]? = nil, location: String? = nil) {
-        self.id = id
-        self.verificationId = verificationId
-        self.location = location
-    }
-    
-    func isThirdParty() -> Bool {
-        return verificationId != nil && location != nil
-    }
+enum Caveat {
+    case firstParty(id: String)
+    case thirdParty(id: String, verificationId: Data, location: String)
 
+    var id: String {
+        switch self {
+        case let .firstParty(id: id):
+            return id
+        case let .thirdParty(id: id, verificationId: _, location: _):
+            return id
+        }
+    }
 }

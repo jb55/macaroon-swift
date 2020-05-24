@@ -1,40 +1,40 @@
 import Foundation
 
 class MacaroonCrypto {
-    private static let magicMacaroonKey = "macaroons-key-generator".toInt8()
+    private static let magicMacaroonKey = "macaroons-key-generator".toInt8().data
     
-    static func createVerificationId(verificationId: [UInt8], signature: [UInt8]) -> [UInt8] {
-        let caveatKey = generateDerivedKey(verificationId)
-        let derivedCaveatKey = caveatKey.trunc(32)
-        let truncatedSignature = signature.trunc(32)
-        return Crypto.secretBox(derivedCaveatKey, secretKey: truncatedSignature)
+    //static func createVerificationId(verificationId: Data, signature: Data) -> Data {
+    //    let caveatKey = generateDerivedKey(key: verificationId)
+    //    let derivedCaveatKey = caveatKey.bytes.trunc(length: 32).data
+    //    let truncatedSignature = signature.bytes.trunc(length: 32).data
+    //    return Crypto.secretBox(message: derivedCaveatKey, secretKey: truncatedSignature)
+    //}
+    
+    static func signWithThirdPartyCaveat(verification: Data, caveatId: Data, signature: Data) -> Data {
+        var verificationIdHash = HMAC.hmac(key: signature, data: verification)
+        let caveatIdHash = HMAC.hmac(key: signature, data: caveatId)
+        verificationIdHash.append(contentsOf: caveatIdHash)
+
+        return HMAC.hmac(key: signature, data: verificationIdHash)
     }
     
-    static func signWithThirdPartyCaveat(verification: [UInt8], caveatId: [UInt8], signature: [UInt8]) -> [UInt8] {
-        var verificationIdHash = Crypto.hmac(key: signature, data: verification)
-        let caveatIdHash = Crypto.hmac(key: signature, data: caveatId)
-        verificationIdHash.appendContentsOf(caveatIdHash)
+    static func initialSignature(key: Data, identifier: Data) -> Data {
+        let derivedKey = generateDerivedKey(key: key)
+        return HMAC.hmac(key: derivedKey, data: identifier)
+    }
+    
+    static func generateDerivedKey(key: Data) -> Data {
+        return HMAC.hmac(key: magicMacaroonKey, data: key)
+    }
+    
+    static func bindSignature(signature: Data, with anotherSignature: Data) -> Data {
+        let emptyArray = [UInt8].init(repeating: 0x00, count: 32)
         
-        return Crypto.hmac(key: signature, data: verificationIdHash)
-    }
-    
-    static func initialSignature(key: [UInt8], identifier: [UInt8]) -> [UInt8] {
-        let derivedKey = generateDerivedKey(key)
-        return Crypto.hmac(key: derivedKey, data: identifier)
-    }
-    
-    static func generateDerivedKey(key: [UInt8]) -> [UInt8] {
-        return Crypto.hmac(key: magicMacaroonKey, data: key)
-    }
-    
-    static func bindSignature(signature: [UInt8], with anotherSignature: [UInt8]) -> [UInt8] {
-        let emptyArray = [UInt8].init(count: 32, repeatedValue: 0x00)
+        var hash1 = HMAC.hmac(key: emptyArray.data, data: signature)
+        let hash2 = HMAC.hmac(key: emptyArray.data, data: anotherSignature)
+        hash1.append(contentsOf: hash2)
         
-        var hash1 = Crypto.hmac(key: emptyArray, data: signature)
-        let hash2 = Crypto.hmac(key: emptyArray, data: anotherSignature)
-        hash1.appendContentsOf(hash2)
-        
-        return Crypto.hmac(key: emptyArray, data: hash1)
+        return HMAC.hmac(key: emptyArray.data, data: hash1)
     }
     
 }

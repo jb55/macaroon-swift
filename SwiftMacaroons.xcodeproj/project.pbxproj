@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4CA756FB247B2CC2000C2BA0 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA756FA247B2CC2000C2BA0 /* Base64.swift */; };
 		82129EDB1BD5808800F124AB /* MacaroonCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */; };
 		8233B73E1BD05D160051D50F /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8233B73D1BD05D160051D50F /* Crypto.swift */; };
 		82390D351BCC8F23002125FB /* Macaroon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82390D341BCC8F23002125FB /* Macaroon.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4CA756FA247B2CC2000C2BA0 /* Base64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
 		82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacaroonCrypto.swift; sourceTree = "<group>"; };
 		8233B73D1BD05D160051D50F /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		82390D341BCC8F23002125FB /* Macaroon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Macaroon.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				826867791BCF0AA40089E1BF /* Extensions.swift */,
 				8233B73D1BD05D160051D50F /* Crypto.swift */,
 				82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */,
+				4CA756FA247B2CC2000C2BA0 /* Base64.swift */,
 			);
 			path = SwiftMacaroons;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */,
 				82390D351BCC8F23002125FB /* Macaroon.swift in Sources */,
 				824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */,
+				4CA756FB247B2CC2000C2BA0 /* Base64.swift in Sources */,
 				82129EDB1BD5808800F124AB /* MacaroonCrypto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

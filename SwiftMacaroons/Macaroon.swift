@@ -1,152 +1,195 @@
 import Foundation
-import CryptoSwift
-import SwiftyBase64
-import Sodium
 
-class Macaroon {
-    
-    var key: [UInt8]
+struct Macaroon {
     var identifier: String
     var location: String
     
     var signature: String {
-        get { return NSData.withBytes(signatureBytes).toHexString() }
+        get { return Data(signatureBytes).toHex() }
     }
     
-    var signatureBytes: [UInt8] = []
+    var signatureBytes: Data
     var caveats: [Caveat]
     
-    private let packetPrefixLength = 4
-    
-    init(key: String, identifier: String, location: String) {
-        self.key = key.toInt8()
+    static let packetPrefixLength = 4
+
+    private init(identifier: String, location: String, caveats: [Caveat], signatureBytes: Data) {
+        self.identifier = identifier
+        self.location = location
+        self.caveats = caveats
+        self.signatureBytes = signatureBytes
+    }
+
+    init(key: Data, identifier: String, location: String) {
         self.identifier = identifier
         self.location = location
         self.caveats = []
-        self.signatureBytes = self.createSignature()
+        self.signatureBytes = Data()
+        self.signatureBytes = self.createSignature(key: key)
     }
-    
-    init(bytes: String) {
-        self.key = [UInt8]()
-        self.identifier = ""
-        self.location = ""
-        self.caveats = []
-        self.signatureBytes = [UInt8]()
-        self.deserialize(bytes)
+
+    init(other: Macaroon) {
+        self.identifier = other.identifier
+        self.location = other.location
+        self.signatureBytes = other.signatureBytes
+        self.caveats = other.caveats
     }
     
     func serialize() -> String {
-        var packets = [UInt8]()
-        packets.appendContentsOf(packetize("location", data: location.toInt8()))
-        packets.appendContentsOf(packetize("identifier", data: identifier.toInt8()))
+        var packets = Data()
+        packets.append(contentsOf: Macaroon.packetize(key: "location", data: location.data(using: .utf8)!))
+        packets.append(contentsOf: Macaroon.packetize(key: "identifier", data: identifier.data(using: .utf8)!))
         
-        caveats.forEach { serializeCaveat($0, intoPackets: &packets) }
+        caveats.forEach { Macaroon.serializeCaveat(caveat: $0, intoPackets: &packets) }
         
-        packets.appendContentsOf(packetize("signature", data: signatureBytes))
-        return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
+        packets.append(contentsOf: Macaroon.packetize(key: "signature", data: signatureBytes))
+        return Base64.encode(Data(packets))
+        //return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
     
-    func serializeCaveat(caveat: Caveat, inout intoPackets packets: [UInt8]) {
-        packets.appendContentsOf(packetize("cid", data: caveat.id.toInt8()))
-        
-        if caveat.isThirdParty() {
-            packets.appendContentsOf(packetize("vid", data: caveat.verificationId!))
-            packets.appendContentsOf(packetize("cl", data: caveat.location!.toInt8()))
+    static func serializeCaveat(caveat: Caveat, intoPackets packets: inout Data) {
+        packets.append(contentsOf: packetize(key: "cid", data: caveat.id.data(using: .utf8)!))
+
+        switch caveat {
+        case let .thirdParty(_, verificationId, location):
+            packets.append(contentsOf: packetize(key: "vid", data: verificationId))
+            packets.append(contentsOf: packetize(key: "cl", data: location.data(using: .utf8)!))
+        case .firstParty(_):
+            break
         }
     }
-    
-    func deserialize(var base64Coded: String) {
-        let numberOfEqualsInTheEnd = (4 - (base64Coded.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) % 4)) % 4
-        for _ in 0..<numberOfEqualsInTheEnd {
-            base64Coded.append("=" as Character)
+
+    static func deserialize(_ base64Coded: String) -> Macaroon? {
+        guard let decoded = Base64.decode(base64Coded) else {
+            // TODO: return errors
+            print("macaroon base64 decode failed: '\(base64Coded)'")
+            return nil
         }
-        
-        let decodedUInt8 = Crypto.base64UrlSafeDecode(base64Coded)
         var index = 0
+
+        var location: String = ""
+        var identifier: String = ""
+        var signatureBytes: Data = Data()
+        var caveats: [Caveat] = []
+        var mcid : String? = nil
+        var mvid : Data? = nil
+        var mcl : String? = nil
         
-        while index < decodedUInt8.count {
-			
-            let str = decodedUInt8[index..<(index + packetPrefixLength)].toString()
+        while index < decoded.count {
+            let str = decoded[index..<(index + packetPrefixLength)].toString()
 
             let packetLength = Int(str, radix: 16)!
-			let packet = decodedUInt8[(index + packetPrefixLength)..<(index + packetLength)]
-			let tuple = depacketize(Array(packet))
+			let packet = decoded[(index + packetPrefixLength)..<(index + packetLength)]
+
+            guard let tuple = depacketize(packet: packet) else {
+                return nil
+            }
 			
 			switch (tuple.0) {
 			case "location":
-				self.location = tuple.1 as! String
+                guard let loc = String(bytes: tuple.1, encoding: .utf8) else {
+                    print("location not utf-8 string: '\(tuple.1.toHex())'")
+                    return nil
+                }
+                location = loc
 			case "identifier":
-				self.identifier = tuple.1 as! String
+                guard let ident = String(bytes: tuple.1, encoding: .utf8) else {
+                    print("identifier not utf-8 string: '\(tuple.1.toHex())'")
+                    return nil
+                }
+                identifier = ident
 			case "signature":
-				self.signatureBytes = (tuple.1 as! NSData).toInt8Array()
+                signatureBytes = tuple.1
             case "cid":
-                self.caveats.append(Caveat(id: tuple.1 as! String))
-            case "vid":
-                self.caveats.last!.verificationId = (tuple.1 as! NSData).toInt8Array()
-            case "cl":
-                self.caveats.last!.location = (tuple.1 as! String)
+                guard let caveatId = String(bytes: tuple.1, encoding: .utf8) else {
+                    print("caveat id not utf-8 string: '\(tuple.1.toHex())'")
+                    return nil
+                }
+                caveats.append(.firstParty(id: caveatId))
+                // TODO: third party caveats
+            //case "vid":
+            //    mvid = tuple.1
+            //case "cl":
+            //    guard let loc = String(bytes: tuple.1, encoding: .utf8) else {
+            //        print("cl not utf-8 string: '\(tuple.1.toHex())'")
+            //        return nil
+            //    }
+            //    mcl = loc
 			default:
-				print("o bixo pegou")
+				print("unknown macaroon field: \(tuple.0)")
 			}
 			
 			index += packetLength
         }
-    }
-    
-	func depacketize(packet: [UInt8]) -> (String, AnyObject) {
-        if Array(packet[0..<3]) == "vid".toInt8() {
-            return ("vid", NSData.withBytes(Array(packet[4..<packet.count - 1])))
+
+        switch (mcid, mvid, mcl) {
+        case (.some(let cid), nil, nil):
+            caveats.append(.firstParty(id: cid))
+        case let (.some(cid), .some(vid), .some(cl)):
+            caveats.append(.thirdParty(id: cid, verificationId: vid, location: cl))
+        case _:
+            break
         }
-		
-		if Array(packet[0..<9]) == "signature".toInt8() {
-			return ("signature", NSData.withBytes(Array(packet[10..<packet.count - 1])))
-		}
-        
-        let packet = packet.toString()
-        let splitString = packet.componentsSeparatedByString(" ")
-        let key = splitString[0]
-        let value = Array(splitString[1..<splitString.count]).joinWithSeparator(" ")
-        
-        return (key, value.stringByReplacingOccurrencesOfString("\n", withString:""))
+
+        return Macaroon(identifier: identifier,
+                        location: location,
+                        caveats: caveats,
+                        signatureBytes: signatureBytes)
     }
     
-    private func packetize(key: String, data: [UInt8]) -> [UInt8] {
-        let packet_size = packetPrefixLength + 2 + key.characters.count + data.count
+	static func depacketize(packet: Data) -> (String, Data)? {
+        // find space break
+        guard let breakAt = packet.firstIndex(of: 0x20) else {
+            print("Macaroon.depacketize: no space found in \(packet.toHex())")
+            return nil
+        }
+
+        let key = packet[..<breakAt]
+        let val = packet[(breakAt+1)...]
+
+        guard let keyStr = String(bytes: key, encoding: .utf8) else {
+            print("Macaroon.depacketize: invalid key \(Array(key).data.toHex())")
+            return nil
+        }
+
+        return (keyStr, val.dropLast())
+    }
+
+    static private func packetize(key: String, data: Data) -> Data {
+        let packet_size = Macaroon.packetPrefixLength + 2 + key.count + data.count
         var header = String(packet_size, radix: 16)
         
-        while header.characters.count < 4 {
-            header = "0".stringByAppendingString(header)
+        while header.count < 4 {
+            header = "0".appending(header)
         }
         
         var content = "\(key) ".toInt8()
-        content.appendContentsOf(data)
-        content.appendContentsOf("\n".toInt8())
+        content.append(contentsOf: data)
+        content.append(contentsOf: "\n".toInt8())
         
         var result = header.toInt8()
-        result.appendContentsOf(content)
-        return result
+        result.append(contentsOf: content)
+        return result.data
     }
     
-    func prepareForRequest(macaroon: Macaroon) -> Macaroon {
-        let result = Macaroon(bytes: self.serialize())
-        result.signatureBytes = MacaroonCrypto.bindSignature(self.signatureBytes, with: macaroon.signatureBytes)
-        return result
+    mutating func addFirstPartyCaveat(_ predicate: String) {
+        caveats.append(.firstParty(id: predicate))
+        signatureBytes =
+            HMAC.hmac(key: signatureBytes,
+                data: predicate.toInt8().data,
+                algo: HMACAlgo.SHA256)
     }
     
-    func addFirstPartyCaveat(predicate: String) {
-        caveats.append(Caveat(id: predicate))
-        signatureBytes = Crypto.hmac(key: signatureBytes, data: predicate.toInt8())
-    }
-    
-    func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
-        let verification = MacaroonCrypto.createVerificationId(verificationId.toInt8(), signature: signatureBytes)
-        
-        caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
-        signatureBytes = MacaroonCrypto.signWithThirdPartyCaveat(verification, caveatId: identifier.toInt8(), signature: signatureBytes)
-    }
-    
-    private func createSignature() -> [UInt8] {
-        return MacaroonCrypto.initialSignature(key, identifier: identifier.toInt8())
+   // func addThirdPartyCaveat(location: String, verificationId: String, identifier: String) {
+   //     let verification = MacaroonCrypto.createVerificationId(verificationId.toInt8(), signature: signatureBytes)
+   //
+   //     caveats.append(Caveat(id: identifier, verificationId: verification, location: location))
+   //     signatureBytes = MacaroonCrypto.signWithThirdPartyCaveat(verification, caveatId: identifier.toInt8(), signature: signatureBytes)
+   // }
+   //
+    private func createSignature(key: Data) -> Data {
+        let ident = identifier.data(using: .utf8)!
+        return MacaroonCrypto.initialSignature(key: key, identifier: ident)
     }
 }
 
