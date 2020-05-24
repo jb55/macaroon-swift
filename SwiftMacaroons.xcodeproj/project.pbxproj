@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		82129EDB1BD5808800F124AB /* MacaroonCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */; settings = {ASSET_TAGS = (); }; };
-		8233B73E1BD05D160051D50F /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8233B73D1BD05D160051D50F /* Crypto.swift */; settings = {ASSET_TAGS = (); }; };
-		82390D351BCC8F23002125FB /* Macaroon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82390D341BCC8F23002125FB /* Macaroon.swift */; settings = {ASSET_TAGS = (); }; };
-		824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824BF9361BCD804F00FBBF6E /* Caveat.swift */; settings = {ASSET_TAGS = (); }; };
-		8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826867791BCF0AA40089E1BF /* Extensions.swift */; settings = {ASSET_TAGS = (); }; };
+		82129EDB1BD5808800F124AB /* MacaroonCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */; };
+		8233B73E1BD05D160051D50F /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8233B73D1BD05D160051D50F /* Crypto.swift */; };
+		82390D351BCC8F23002125FB /* Macaroon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82390D341BCC8F23002125FB /* Macaroon.swift */; };
+		824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824BF9361BCD804F00FBBF6E /* Caveat.swift */; };
+		8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826867791BCF0AA40089E1BF /* Extensions.swift */; };
 		82CE1F631BCB0DB600138020 /* SwiftMacaroons.h in Headers */ = {isa = PBXBuildFile; fileRef = 82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		82CE1F6A1BCB0DB600138020 /* SwiftMacaroons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */; settings = {ASSET_TAGS = (); }; };
+		82CE1F6A1BCB0DB600138020 /* SwiftMacaroons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */; };
 		82CE1F6F1BCB0DB600138020 /* SwiftMacaroonsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CE1F6E1BCB0DB600138020 /* SwiftMacaroonsTests.swift */; };
-		FCF90A8A95DF71E24358FC8A /* Pods_SwiftMacaroons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7408B1EEC67D98CDAB9D9810 /* Pods_SwiftMacaroons.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,9 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4D2316991FF01138B24BE23A /* Pods-SwiftMacaroons.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftMacaroons.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftMacaroons/Pods-SwiftMacaroons.debug.xcconfig"; sourceTree = "<group>"; };
-		60EAD28556FCBDC0C02DB75B /* Pods-SwiftMacaroons.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftMacaroons.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftMacaroons/Pods-SwiftMacaroons.release.xcconfig"; sourceTree = "<group>"; };
-		7408B1EEC67D98CDAB9D9810 /* Pods_SwiftMacaroons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftMacaroons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacaroonCrypto.swift; sourceTree = "<group>"; };
 		8233B73D1BD05D160051D50F /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		82390D341BCC8F23002125FB /* Macaroon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Macaroon.swift; sourceTree = "<group>"; };
@@ -50,7 +46,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCF90A8A95DF71E24358FC8A /* Pods_SwiftMacaroons.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,31 +60,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3DC7E096A8B83628EDFDF880 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4D2316991FF01138B24BE23A /* Pods-SwiftMacaroons.debug.xcconfig */,
-				60EAD28556FCBDC0C02DB75B /* Pods-SwiftMacaroons.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		4DBCA00EEE51CE0ABFCDDCBD /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7408B1EEC67D98CDAB9D9810 /* Pods_SwiftMacaroons.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		82CE1F551BCB0DB600138020 = {
 			isa = PBXGroup;
 			children = (
 				82CE1F611BCB0DB600138020 /* SwiftMacaroons */,
 				82CE1F6D1BCB0DB600138020 /* SwiftMacaroonsTests */,
 				82CE1F601BCB0DB600138020 /* Products */,
-				3DC7E096A8B83628EDFDF880 /* Pods */,
-				4DBCA00EEE51CE0ABFCDDCBD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,12 +119,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 82CE1F731BCB0DB600138020 /* Build configuration list for PBXNativeTarget "SwiftMacaroons" */;
 			buildPhases = (
-				AC760BA94F2388C719FBC6AC /* Check Pods Manifest.lock */,
 				82CE1F5A1BCB0DB600138020 /* Sources */,
 				82CE1F5B1BCB0DB600138020 /* Frameworks */,
 				82CE1F5C1BCB0DB600138020 /* Headers */,
 				82CE1F5D1BCB0DB600138020 /* Resources */,
-				0DA246BC41345E8833779B22 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,39 +203,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0DA246BC41345E8833779B22 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SwiftMacaroons/Pods-SwiftMacaroons-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AC760BA94F2388C719FBC6AC /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		82CE1F5A1BCB0DB600138020 /* Sources */ = {
@@ -386,7 +327,6 @@
 		};
 		82CE1F741BCB0DB600138020 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D2316991FF01138B24BE23A /* Pods-SwiftMacaroons.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
@@ -400,12 +340,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		82CE1F751BCB0DB600138020 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60EAD28556FCBDC0C02DB75B /* Pods-SwiftMacaroons.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
