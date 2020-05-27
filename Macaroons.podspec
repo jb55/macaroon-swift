@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'Macaroon'
+  s.name             = 'Macaroons'
   s.version          = '0.1.0'
   s.summary          = 'Better auth cookies'
 
