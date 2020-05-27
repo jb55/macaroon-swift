@@ -1,10 +1,10 @@
 import Foundation
 
-enum Caveat {
+public enum Caveat {
     case firstParty(id: String)
     case thirdParty(id: String, verificationId: Data, location: String)
 
-    var id: String {
+    public var id: String {
         switch self {
         case let .firstParty(id: id):
             return id

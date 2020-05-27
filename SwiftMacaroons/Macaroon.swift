@@ -20,7 +20,7 @@ struct Macaroon {
         self.signatureBytes = signatureBytes
     }
 
-    init(key: Data, identifier: String, location: String) {
+    public init(key: Data, identifier: String, location: String) {
         self.identifier = identifier
         self.location = location
         self.caveats = []
@@ -28,14 +28,14 @@ struct Macaroon {
         self.signatureBytes = self.createSignature(key: key)
     }
 
-    init(other: Macaroon) {
+    public init(other: Macaroon) {
         self.identifier = other.identifier
         self.location = other.location
         self.signatureBytes = other.signatureBytes
         self.caveats = other.caveats
     }
     
-    func serialize() -> String {
+    public func serialize() -> String {
         var packets = Data()
         packets.append(contentsOf: Macaroon.packetize(key: "location", data: location.data(using: .utf8)!))
         packets.append(contentsOf: Macaroon.packetize(key: "identifier", data: identifier.data(using: .utf8)!))
@@ -47,7 +47,7 @@ struct Macaroon {
         //return SwiftyBase64.EncodeString(packets, alphabet:.URLAndFilenameSafe).stringByReplacingOccurrencesOfString("=", withString: "")
     }
     
-    static func serializeCaveat(caveat: Caveat, intoPackets packets: inout Data) {
+    public static func serializeCaveat(caveat: Caveat, intoPackets packets: inout Data) {
         packets.append(contentsOf: packetize(key: "cid", data: caveat.id.data(using: .utf8)!))
 
         switch caveat {
@@ -59,7 +59,7 @@ struct Macaroon {
         }
     }
 
-    static func deserialize(_ base64Coded: String) -> Macaroon? {
+    public static func deserialize(_ base64Coded: String) -> Macaroon? {
         guard let decoded = Base64.decode(base64Coded) else {
             // TODO: return errors
             print("macaroon base64 decode failed: '\(base64Coded)'")
@@ -71,9 +71,10 @@ struct Macaroon {
         var identifier: String = ""
         var signatureBytes: Data = Data()
         var caveats: [Caveat] = []
-        var mcid : String? = nil
-        var mvid : Data? = nil
-        var mcl : String? = nil
+        
+        let mcid : String? = nil
+        let mvid : Data? = nil
+        let mcl : String? = nil
         
         while index < decoded.count {
             let str = decoded[index..<(index + packetPrefixLength)].toString()
@@ -172,7 +173,7 @@ struct Macaroon {
         return result.data
     }
     
-    mutating func addFirstPartyCaveat(_ predicate: String) {
+    public mutating func addFirstPartyCaveat(_ predicate: String) {
         caveats.append(.firstParty(id: predicate))
         signatureBytes =
             HMAC.hmac(key: signatureBytes,
