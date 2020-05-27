@@ -2,26 +2,6 @@
 import Foundation
 import CommonCrypto
 
-// base64 encoding with no padding
-public struct Base64 {
-    static func encode(_ data: Data) -> String {
-        return String(bytes: Base64Encode(data.bytes), encoding: .utf8)!
-            .trimmingCharacters(in: CharacterSet(charactersIn: "="))
-    }
-
-    static func decode(_ b64url: String) -> Data? {
-        var base64 = b64url
-            .replacingOccurrences(of: "-", with: "+")
-            .replacingOccurrences(of: "_", with: "/")
-
-        if base64.count % 4 != 0 {
-            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
-        }
-
-        return Data(base64Encoded: base64)
-    }
-}
-
 public struct HMAC {
     public static func hmac(key: Data, data: Data, algo: HMACAlgo=HMACAlgo.SHA256) -> Data {
         let nsdata = data as NSData

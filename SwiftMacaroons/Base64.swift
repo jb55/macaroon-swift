@@ -5,6 +5,28 @@
 //  Created by Doug Richardson on 8/7/15.
 //  LICENSE: public domain
 //
+
+// base64 encoding with no padding
+public struct Base64 {
+    public static func encode(_ data: Data) -> String {
+        return String(bytes: Base64Encode(data.bytes), encoding: .utf8)!
+            .trimmingCharacters(in: CharacterSet(charactersIn: "="))
+    }
+
+    public static func decode(_ b64url: String) -> Data? {
+        var base64 = b64url
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+
+        if base64.count % 4 != 0 {
+            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
+        }
+
+        return Data(base64Encoded: base64)
+    }
+}
+
+
 /**
  Base64 Alphabet to use during encoding.
 
