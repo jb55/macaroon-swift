@@ -1,6 +1,6 @@
 import Foundation
 
-struct Macaroon {
+public struct Macaroon {
     var identifier: String
     var location: String
     
