@@ -74,7 +74,20 @@ class SwiftMacaroonsTests: XCTestCase {
 		
 		let macaroonRight = getMacaroon()
         XCTAssert(macaroon.signature == macaroonRight.signature)
+    }
 
+    func testMacaroonDeserializationV2() {
+        let serializedMacaroon = "AgELc3RlYW1vai5uZXQCGmF1dGhvamktMS05NmFlMWY1MWFkNGU5ZWU1AAIPcXVlcnkgMTdkOCwxNzk4AAIRZXhwaXJlIDE1OTEyMTk0NzQAAAYgYa-aY8jkOqj6FEeFXmBrxB7YaRV7XL9tAoCwCxIl-u0"
+        let mmacaroon = Macaroon.deserialize(serializedMacaroon)
+
+        XCTAssert(mmacaroon != nil)
+        let macaroon = mmacaroon!
+
+        XCTAssert(macaroon.location == "steamoj.net")
+        XCTAssert(macaroon.identifier == "authoji-1-96ae1f51ad4e9ee5")
+
+        //let macaroonRight = getMacaroon()
+        //XCTAssert(macaroon.signature == macaroonRight.signature)
     }
 	
 	func testMacaroonWithFirstPartyCaveatDeserialization() {

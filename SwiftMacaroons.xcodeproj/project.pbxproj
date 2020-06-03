@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C59955D24855189007CDFC2 /* Serialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C59955C24855189007CDFC2 /* Serialize.swift */; };
 		4CA756FB247B2CC2000C2BA0 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA756FA247B2CC2000C2BA0 /* Base64.swift */; };
 		82129EDB1BD5808800F124AB /* MacaroonCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */; };
 		8233B73E1BD05D160051D50F /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8233B73D1BD05D160051D50F /* Crypto.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C59955C24855189007CDFC2 /* Serialize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serialize.swift; sourceTree = "<group>"; };
 		4CA756FA247B2CC2000C2BA0 /* Base64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
 		82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacaroonCrypto.swift; sourceTree = "<group>"; };
 		8233B73D1BD05D160051D50F /* Crypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				8233B73D1BD05D160051D50F /* Crypto.swift */,
 				82129EDA1BD5808800F124AB /* MacaroonCrypto.swift */,
 				4CA756FA247B2CC2000C2BA0 /* Base64.swift */,
+				4C59955C24855189007CDFC2 /* Serialize.swift */,
 			);
 			path = SwiftMacaroons;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 					};
 					82CE1F681BCB0DB600138020 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = XK7H4JAB3D;
 					};
 				};
 			};
@@ -214,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8233B73E1BD05D160051D50F /* Crypto.swift in Sources */,
+				4C59955D24855189007CDFC2 /* Serialize.swift in Sources */,
 				8268677A1BCF0AA40089E1BF /* Extensions.swift in Sources */,
 				82390D351BCC8F23002125FB /* Macaroon.swift in Sources */,
 				824BF9371BCD804F00FBBF6E /* Caveat.swift in Sources */,
@@ -357,7 +362,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -376,7 +383,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -393,6 +402,7 @@
 		82CE1F771BCB0DB600138020 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = XK7H4JAB3D;
 				INFOPLIST_FILE = SwiftMacaroonsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bearch.SwiftMacaroonsTests;
@@ -404,6 +414,7 @@
 		82CE1F781BCB0DB600138020 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = XK7H4JAB3D;
 				INFOPLIST_FILE = SwiftMacaroonsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bearch.SwiftMacaroonsTests;
