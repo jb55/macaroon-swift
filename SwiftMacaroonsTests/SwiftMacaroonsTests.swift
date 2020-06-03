@@ -85,9 +85,8 @@ class SwiftMacaroonsTests: XCTestCase {
 
         XCTAssert(macaroon.location == "steamoj.net")
         XCTAssert(macaroon.identifier == "authoji-1-96ae1f51ad4e9ee5")
+        XCTAssert(macaroon.signature.count > 0)
 
-        //let macaroonRight = getMacaroon()
-        //XCTAssert(macaroon.signature == macaroonRight.signature)
     }
 	
 	func testMacaroonWithFirstPartyCaveatDeserialization() {

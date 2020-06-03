@@ -10,10 +10,10 @@ import Foundation
 
 enum FieldTag : Int {
     case eos = 0
-    case location
-    case identifier
-    case verificationId
-    case signature
+    case location = 1
+    case identifier = 2
+    case verificationId = 4
+    case signature = 6
 }
 
 struct PacketV2 {
@@ -280,9 +280,17 @@ public func deserializeMacaroonV2(_ data: inout Data) -> Macaroon? {
         caveats.append(.thirdParty(id: identifier, verificationId: packets[0].data, location: loc))
     }
 
-    let signature = Data()
+    guard let sig = parsePacketV2(&data) else {
+        print("failed to parsed signature data")
+        return nil
+    }
 
-    return Macaroon(identifier: macId, location: macLoc, caveats: caveats, signatureBytes: signature)
+    if sig.tag != .signature {
+        print("unexpected field found instead of signature")
+        return nil
+    }
+
+    return Macaroon(identifier: macId, location: macLoc, caveats: caveats, signatureBytes: sig.data)
 }
 
 public func deserializeMacaroon(_ data: Data) -> Macaroon? {
