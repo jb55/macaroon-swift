@@ -39,10 +39,8 @@
 		826867791BCF0AA40089E1BF /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		82CE1F5F1BCB0DB600138020 /* SwiftMacaroons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftMacaroons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftMacaroons.h; sourceTree = "<group>"; };
-		82CE1F641BCB0DB600138020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82CE1F691BCB0DB600138020 /* SwiftMacaroonsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftMacaroonsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82CE1F6E1BCB0DB600138020 /* SwiftMacaroonsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftMacaroonsTests.swift; sourceTree = "<group>"; };
-		82CE1F701BCB0DB600138020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				82CE1F621BCB0DB600138020 /* SwiftMacaroons.h */,
-				82CE1F641BCB0DB600138020 /* Info.plist */,
 				82390D341BCC8F23002125FB /* Macaroon.swift */,
 				824BF9361BCD804F00FBBF6E /* Caveat.swift */,
 				826867791BCF0AA40089E1BF /* Extensions.swift */,
@@ -102,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				82CE1F6E1BCB0DB600138020 /* SwiftMacaroonsTests.swift */,
-				82CE1F701BCB0DB600138020 /* Info.plist */,
 			);
 			path = SwiftMacaroonsTests;
 			sourceTree = "<group>";
