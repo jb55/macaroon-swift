@@ -9,7 +9,7 @@ public struct Macaroon {
     }
     
     var signatureBytes: Data
-    var caveats: [Caveat]
+    public var caveats: [Caveat]
 
     public init(identifier: String, location: String, caveats: [Caveat], signatureBytes: Data) {
         self.identifier = identifier
