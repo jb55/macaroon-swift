@@ -1,14 +1,14 @@
 import Foundation
 
 public struct Macaroon {
-    var identifier: String
-    var location: String
+    public var identifier: String
+    public var location: String
     
     var signature: String {
         get { return Data(signatureBytes).toHex() }
     }
     
-    var signatureBytes: Data
+    public var signatureBytes: Data
     public var caveats: [Caveat]
 
     public init(identifier: String, location: String, caveats: [Caveat], signatureBytes: Data) {
